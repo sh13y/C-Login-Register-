@@ -1,114 +1,56 @@
-# Simple Login and Registration System in C++
+# C++ Login and Registration System
 
-This is a basic C++ program that implements a login and registration system using text files to store and verify user credentials.
+This program implements a simple login and registration system using C++ and text files to store user credentials. Users can register an account, log in, and view a basic dashboard upon successful login. Key improvements were made for enhanced usability and better code organization.
 
-## How It Works
+## Key Features
 
-The program allows users to register with a username and password or log in with an existing account. Each username is stored in a separate text file, where the username and password are saved. Here’s a breakdown of the main features:
+- **Main Menu**: Users can choose to register a new account, log in to an existing account, or exit the program.
+- **Registration**: Prompts the user to enter a unique username and password. Credentials are stored in a text file named `<username>.txt`.
+- **Login**: Validates user credentials by checking against the stored username and password.
+- **Dashboard**: Upon successful login, a simple dashboard is displayed, welcoming the user.
+- **Error Handling**: Displays a message if the user file does not exist or if credentials are incorrect.
 
-### Features
+## Key Changes and Improvements
 
-1. **Main Menu**: Users can select from two options:
-   - Register a new account
-   - Log in to an existing account
+1. **Function Organization**: The code is modularized with `registerUser()`, `isLoggedIn()`, and `displayDashboard()` functions, making it easier to understand and maintain.
+2. **Error Handling**:
+   - Checks if the user file exists during login. Displays "User not found" if the file is missing.
+   - Added validation for incorrect menu choices to improve user guidance.
+3. **Looping Menu**: The `while(true)` loop allows users to return to the main menu after each action, creating a smoother user experience.
+4. **Exit Option**: A "3. Exit" option was added to allow users to exit the program gracefully.
 
-2. **Registration**:
-   - Prompts the user for a username and password.
-   - Creates a text file named `<username>.txt` and stores the username and password inside.
-   
-3. **Login**:
-   - Prompts the user to enter their username and password.
-   - Reads the corresponding text file and verifies if the entered credentials match the stored ones.
+## Code Overview
 
-4. **Dashboard**:
-   - After a successful login, a simple dashboard is displayed with two options:
-     - **Sign Out**: Exits the program.
-     - **Back to Main Menu**: Returns to the main menu, allowing the user to register or log in again.
-
-### Code Explanation
-
-1. **isLoggedIn() Function**: 
+1. **isLoggedIn()**:
    - Takes a username and password as input.
-   - Reads the stored username and password from the text file named `<username>.txt`.
-   - Returns `true` if the input matches the stored credentials; otherwise, it returns `false`.
+   - Checks if the user file `<username>.txt` exists.
+   - If the file exists, it reads the credentials and compares them to the input values.
+   - Returns `true` if credentials match, otherwise returns `false`.
 
-2. **main() Function**:
-   - Displays the main menu and handles user input for registration and login.
-   - If registration is selected, it prompts for a username and password, then saves them in a new text file.
-   - If login is selected, it calls the `isLoggedIn()` function to verify credentials.
-   - Upon successful login, a simple dashboard is displayed.
+2. **registerUser()**:
+   - Prompts the user to create a username and password.
+   - Saves credentials to a new file named `<username>.txt`.
+   - Displays a message confirming successful registration.
 
-## Code Sample
+3. **displayDashboard()**:
+   - Shows a basic welcome message upon successful login.
 
-```cpp
-#include <iostream> 
-#include <fstream> // reading and writing files 
-#include <string>
+4. **main()**:
+   - Displays the main menu and prompts the user to choose an action.
+   - Calls appropriate functions based on the user's choice.
+   - Includes input validation to handle invalid choices and exits if the user selects "3. Exit."
 
-using namespace std;
+## Future Improvements
 
-// Function for logging in
-bool isLoggedIn()
-{
-    string username, password;
-    string un, pw; // comparison strings
+- **Password Encryption**: Encrypt passwords before saving them to enhance security.
+- **Multiple Attempts Limit**: Restrict login attempts to prevent brute-force attacks.
+- **Password Requirements**: Enforce minimum length or complexity for passwords.
+- **Account Recovery**: Add functionality for users to recover or reset their passwords.
+- **Database Integration**: Use a database for credential storage, making the system scalable and more secure.
 
-    cout << "Enter a username: ";
-    cin >> username; 
-    cout << "Enter a password: ";
-    cin >> password;
+## How to Compile and Run
 
-    ifstream read(username + ".txt"); // ifstream reads a file 
-    getline(read, un); // reads the username 
-    getline(read, pw); // reads the password
-
-    return un == username && pw == password;
-}
-
-// Main function handling the main menu, registration, and login
-int main()
-{
-    int choice;
-    cout << "Main Menu:\n1. Register\n2. Login\nYour choice: ";
-    cin >> choice;
-
-    if(choice == 1)
-    {
-        // Registration
-        string username, password;
-        cout << "Registration:\nSelect a username: ";
-        cin >> username;
-        cout << "Select a password: ";
-        cin >> password;
-
-        ofstream file(username + ".txt"); 
-        file << username << endl << password;
-        file.close();
-        cout << "Welcome " << username << "!" << endl;
-    }
-    else if(choice == 2)
-    {
-        // Login
-        if(isLoggedIn())
-        {
-            cout << "Successfully logged in!\nDASHBOARD\n1. Sign Out\n2. Back to main menu\nYour choice: ";
-            int choiceTwo;
-            cin >> choiceTwo;
-
-            if(choiceTwo == 1)
-            {
-                system("exit");
-            }
-            else if(choiceTwo == 2)
-            {
-                main();
-            }
-        }
-        else
-        {
-            cout << "Invalid login!\n";
-            main();
-        }
-    }
-    return 0;
-}
+1. Clone or download this repository.
+2. Compile the code:
+   ```bash
+   g++ -o login_system login_system.cpp
